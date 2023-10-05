@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10;
     public float downwardForce = -5f;
     private Rigidbody _rigidBody;
-    private bool _canJump = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,21 +24,19 @@ public class PlayerController : MonoBehaviour
         {
             _rigidBody.AddForce(0,downwardForce*Time.deltaTime,0);
         }
-        if (Input.GetButtonDown("Jump") && _canJump)
+        if (Input.GetButtonDown("Jump") && IsTouchingGround())
         {
             Jump();
-            _canJump = false;
         }
         transform.Translate(0,0, speed * Time.deltaTime);
 
     }
 
-    private void OnCollisionEnter(Collision other)
+    private bool IsTouchingGround()
     {
-        if (other.gameObject.transform.CompareTag("Ground"))
-        {
-            _canJump = true;
-        }
+        int layerMask = LayerMask.GetMask("Ground");
+        var tr = transform;
+        return Physics.CheckBox(tr.position, tr.lossyScale/1.99f, tr.rotation, layerMask);
     }
 
     private void Jump()
