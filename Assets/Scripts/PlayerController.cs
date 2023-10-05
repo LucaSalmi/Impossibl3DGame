@@ -9,21 +9,21 @@ public class PlayerController : MonoBehaviour
     
     public float speed = 1.0f;
     public float jumpForce = 10;
-
-    private bool canJump = true;
+    private Rigidbody _rigidBody;
+    private bool _canJump = true;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _rigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && canJump)
+        if (Input.GetButtonDown("Jump") && _canJump)
         {
             Jump();
-            canJump = false;
+            _canJump = false;
         }
         transform.Translate(0,0, speed * Time.deltaTime);
 
@@ -33,13 +33,12 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.transform.CompareTag("Ground"))
         {
-            canJump = true;
+            _canJump = true;
         }
     }
 
     private void Jump()
     {
-        var rigidBody = GetComponent<Rigidbody>();
-        rigidBody.AddForce(0, jumpForce, 0, ForceMode.Impulse);
+        _rigidBody.AddForce(0, jumpForce, 0, ForceMode.Impulse);
     }
 }
