@@ -8,14 +8,11 @@ public class CameraBehaviour : MonoBehaviour
     public float smoothSpeed = 0.125f;
     public Vector3 locationOffset;
 
-    void FixedUpdate()
+   private void LateUpdate()
     {
         if(target.IsDestroyed()) return;
-        
-        Vector3 desiredPosition = target.position + target.rotation * locationOffset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
 
-        
+        Vector3 targetPosition = target.position + new Vector3(0, locationOffset.y, locationOffset.z);
+        transform.position = targetPosition;
     }
 }

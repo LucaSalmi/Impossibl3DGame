@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-        transform.Translate(0,0, speed * Time.deltaTime);
+        transform.Translate(0,0, speed * Time.deltaTime, Space.World);
 
     }
 
@@ -42,5 +42,6 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         _rigidBody.AddForce(0, jumpForce, 0, ForceMode.Impulse);
+        _rigidBody.angularVelocity = new Vector3(2,0,0);
     }
 }
