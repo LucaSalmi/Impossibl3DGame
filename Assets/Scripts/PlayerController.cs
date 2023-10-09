@@ -2,33 +2,41 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
     
-    public float speed = 1.0f;
+    public float forwardSpeed = 1.0f;
     public float jumpForce = 10;
     public float downwardForce = -5f;
     private Rigidbody _rigidBody;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        if (_rigidBody.velocity.y < -.1f)
+        var playerVelocity = _rigidBody.velocity;
+        if (playerVelocity.y < -.1f)
         {
             _rigidBody.AddForce(0,downwardForce*Time.deltaTime,0);
         }
-        if (Input.GetButtonDown("Jump") && IsTouchingGround())
+
+        playerVelocity.z = forwardSpeed;
+        _rigidBody.velocity = playerVelocity;
+    }
+    // Update is called once per frame
+    private void Update()
+    {
+        
+        if (Input.GetButton("Jump") && IsTouchingGround())
         {
             Jump();
         }
-        transform.Translate(0,0, speed * Time.deltaTime, Space.World);
 
     }
 
@@ -41,7 +49,9 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        _rigidBody.AddForce(0, jumpForce, 0, ForceMode.Impulse);
+        var playerVelocity = _rigidBody.velocity;
+        playerVelocity.y = jumpForce;
+        _rigidBody.velocity = playerVelocity;
         _rigidBody.angularVelocity = new Vector3(2,0,0);
     }
 }
